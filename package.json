@@ -1,0 +1,11 @@
+{
+	"name": "my-social-network",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"bower":"1.7.9",
+		"express": "~4.14.0",
+		"pug": "~2.0.0-beta3",
+		"mongoose": "~4.5.2"
+	}
+}

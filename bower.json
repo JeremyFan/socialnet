@@ -1,0 +1,15 @@
+{
+  "name": "socialnet",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~3.0.0",
+    "underscore": "~1.8.3"
+  }
+}
