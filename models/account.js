@@ -39,14 +39,26 @@ module.exports = function(mongoose, nodemailer) {
 
 	var Account = mongoose.model('Account', AccountSchema);
 
-	var user = new Account({
-		mail: 'vdx14@126.com',
-		password: '123',
-		name: 'jeremy',
-		photoUrl: 'http://www.baidu.com'
-	});
+	var registerCallback = function(err) {
+		if (err)
+			return console.log(err);
 
-	user.save();
+		return console.log('Account was created');
+	}
 
-	console.log('saved');
+	var changePassword = function(accountId, newPassword) {
+
+	}
+
+	var forgetPassword = function(email, resetPasswordUrl, callback) {
+
+	}
+
+	var login = function(email, password, callback) {
+
+	}
+
+	var register = function(email, password, name) {
+
+	}
 };
