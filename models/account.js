@@ -67,12 +67,27 @@ module.exports = function(mongoose, nodemailer) {
 			if (err) {
 				callback(false);
 			} else {
+				var conf = require('../conf/mail');
+				var mailOptions = {
+					from: conf.auth.user,
+					to: doc.email,
+					subject: 'SocialNet Password Request',
+					text: 'Click here to reset your password: ' + resetPasswordUrl
+				}
+				var mailCallback = function(err) {
+					if (err)
+						callback(false)
+					else
+						callback(true);
+				}
+				var transporter = nodemailer.createTransport(conf);
 
+				transporter.sendMail(mailOptions, mailCallback);
 			}
 		});
 	}
 
-	/**
+	/*
 	 * 登录
 	 * @param  {[type]}   email    邮箱
 	 * @param  {[type]}   password 密码
