@@ -40,7 +40,12 @@ module.exports = function(mongoose, nodemailer) {
 	var Account = mongoose.model('Account', AccountSchema);
 
 
-
+	/**
+	 * 修改密码
+	 * @param  {[type]} accountId   [description]
+	 * @param  {[type]} newPassword [description]
+	 * @return {[type]}             [description]
+	 */
 	var changePassword = function(accountId, newPassword) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(newPassword);
@@ -60,6 +65,13 @@ module.exports = function(mongoose, nodemailer) {
 		});
 	}
 
+	/**
+	 * 忘记密码
+	 * @param  {[type]}   email            [description]
+	 * @param  {[type]}   resetPasswordUrl [description]
+	 * @param  {Function} callback         [description]
+	 * @return {[type]}                    [description]
+	 */
 	var forgotPassword = function(email, resetPasswordUrl, callback) {
 		var user = Account.findOne({
 			email: email
@@ -75,10 +87,13 @@ module.exports = function(mongoose, nodemailer) {
 					text: 'Click here to reset your password: ' + resetPasswordUrl
 				}
 				var mailCallback = function(err) {
+					/*
 					if (err)
 						callback(false)
 					else
 						callback(true);
+					*/
+					callback(!err);
 				}
 				var transporter = nodemailer.createTransport(conf);
 
