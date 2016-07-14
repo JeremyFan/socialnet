@@ -5,6 +5,8 @@ var port = 8005;
 var nodemailer = require('nodemailer');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var bodyParser = require('body-parser');
+
 
 var Account = require('./models/account')(mongoose, nodemailer);
 
@@ -18,6 +20,9 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.get('/', function(req, res) {
 	res.render('index.pug', {
 		layout: false
@@ -30,6 +35,21 @@ app.get('/account/authenticated', function(req, res) {
 	else
 		res.sendStatus(401);
 });
+
+app.post('/register', function(req, res) {
+	var name = req.body.name || 'noname';
+	var email = req.body.email || null;
+	var password = req.body.password || null;
+
+	if (null == email || null == password) {
+		res.sendStatus(400);
+		return;
+	}
+
+	Account.register(email, password, name);
+	res.sendStatus(200);
+});
+
 
 app.listen(port);
 console.log('server start at port:', port);
