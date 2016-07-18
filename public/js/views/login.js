@@ -8,7 +8,7 @@ define(['text!templates/login.html'], function(loginTpl) {
 
 		render: function() {
 			this.$el.html(loginTpl);
-			$('#error').hide();
+			this.$('#error').hide();
 		},
 
 		login: function() {
@@ -16,6 +16,7 @@ define(['text!templates/login.html'], function(loginTpl) {
 				email: this.$('input[name="email"]').val(),
 				password: this.$('input[name="password"]').val()
 			}
+			var self = this;
 
 			$.ajax({
 				url: '/login',
@@ -26,7 +27,7 @@ define(['text!templates/login.html'], function(loginTpl) {
 					// todo: maybe handle session?
 				},
 				error: function() {
-					this.$('#error').text('Unable to login').slideDown();
+					self.$('#error').text('Unable to login').slideDown();
 				}
 			});
 

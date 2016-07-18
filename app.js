@@ -20,7 +20,9 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+	extended: false
+}));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
@@ -37,9 +39,9 @@ app.get('/account/authenticated', function(req, res) {
 });
 
 app.post('/register', function(req, res) {
-	var name = req.body.name || 'noname';
-	var email = req.body.email || null;
-	var password = req.body.password || null;
+	var name = req.body.name || 'noname',
+		email = req.body.email || null,
+		password = req.body.password || null;
 
 	if (null == email || null == password) {
 		res.sendStatus(400);
@@ -48,6 +50,29 @@ app.post('/register', function(req, res) {
 
 	Account.register(email, password, name);
 	res.sendStatus(200);
+});
+
+app.post('/login', function(req, res) {
+	console.log('login request');
+
+	var email = req.body.email || null,
+		password = req.body.password || null;
+
+	if (null == email || email.length < 1 || null == password || password.length < 1) {
+		res.sendStatus(400);
+		return;
+	}
+
+	Account.login(email, password, function(success) {
+		if (!success) {
+			res.sendStatus(401);
+			return;
+		}
+
+		req.session.loggedIn = true;
+		console.log('login was successful');
+		res.sendStatus(200);
+	});
 });
 
 
