@@ -12,7 +12,7 @@ define(['text!templates/forgotpassword.html'], function(forgotpasswordTpl) {
 
 		forgotpassword: function() {
 			var data = {
-				email: this.$('input[name="email"]')
+				email: this.$('input[name="email"]').val()
 			}
 			$.ajax({
 				url: '/forgotpassword',

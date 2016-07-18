@@ -75,6 +75,38 @@ app.post('/login', function(req, res) {
 	});
 });
 
+app.post('/forgotpassword', function(req, res) {
+	var hostname = req.headers.host;
+	var resetPasswordUrl = 'http://' + hostname + '/resetPassword';
+	var email = req.body.email || null;
+	if (null == email || email.length < 1) {
+		res.sendStatus(400);
+		return;
+	}
+
+	Account.forgotPassword(email, resetPasswordUrl, function(success) {
+		var statusCode = success ? 200 : 404;
+		res.sendStatus(statusCode);
+	});
+});
+
+app.get('/resetPassword', function(req, res) {
+	var accountId = req.query.account || null;
+
+	res.render('resetpassword.pug', {
+		accountId: accountId
+	});
+});
+
+app.post('/resetPassword', function(req, res) {
+	var accountId = req.body.accountId || null;
+	var password = req.body.password || null;
+
+	if (null != accountId && null != password)
+		Account.changePassword(accountId, password);
+
+	res.render('resetpassword-success.pug');
+});
 
 app.listen(port);
 console.log('server start at port:', port);

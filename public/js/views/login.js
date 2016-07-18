@@ -25,6 +25,9 @@ define(['text!templates/login.html'], function(loginTpl) {
 				success: function(data) {
 					console.log(data);
 					// todo: maybe handle session?
+					// handle session in node
+					
+					self.$('#error').text('Unable to login').slideUp();
 				},
 				error: function() {
 					self.$('#error').text('Unable to login').slideDown();

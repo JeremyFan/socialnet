@@ -80,22 +80,23 @@ module.exports = function(mongoose, nodemailer) {
 				callback(false);
 			} else {
 				var conf = require('../conf/mail');
+				var transporter = nodemailer.createTransport(conf);
+				
+				resetPasswordUrl += '?account=' + doc._id;
 				var mailOptions = {
 					from: conf.auth.user,
 					to: doc.email,
 					subject: 'SocialNet Password Request',
-					text: 'Click here to reset your password: ' + resetPasswordUrl
+					html: 'Click <a href="' + resetPasswordUrl + '" target="_blank">here</a> to reset your password: ' + '<a href="' + resetPasswordUrl + '" target="-blank">' + resetPasswordUrl + '</a>'
 				}
-				var mailCallback = function(err) {
-					/*
-					if (err)
-						callback(false)
-					else
-						callback(true);
-					*/
+
+				var mailCallback = function(err, info) {
 					callback(!err);
+
+					console.log(err);
+					if (info) console.log(info.response);
 				}
-				var transporter = nodemailer.createTransport(conf);
+
 
 				transporter.sendMail(mailOptions, mailCallback);
 			}
