@@ -6,7 +6,7 @@ require.config({
 		text: '/js/bower_components/text/text',
 		templates: '../templates',
 
-		'socialnet-view':'js/socialnetview'
+		'socialnet-view':'/js/socialnet-view'
 	},
 
 	shim: {
