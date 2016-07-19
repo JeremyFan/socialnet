@@ -108,5 +108,48 @@ app.post('/resetPassword', function(req, res) {
 	res.render('resetpassword-success.pug');
 });
 
+app.get('/accounts/:id', function(req, res) {
+	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
+
+	// FIXME: use findById
+	Account.findOne({
+		_id: accountId
+	}, function(account) {
+		res.send(account);
+	});
+});
+
+app.get('/accounts/:id/status', function(req, res) {
+	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
+	models.Account.findById(accountId, function(account) {
+		res.send(account.status);
+	});
+});
+
+app.post('/accounts/:id/status', function(req, res) {
+	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
+	models.Account.findById(accountId, function(account) {
+		var status = {
+			name: account.name,
+			status: req.body.status || ''
+		};
+		account.status.push(status);
+
+		account.activity.push(status);
+		account.save(function(err) {
+			if (err)
+				console.log('Error saving account: ' + err);
+		});
+	});
+	res.sendStatus(200);
+});
+
+app.get('/accounts/:id/activity',function(req,res){
+	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
+	models.Account.findById(accountId,function(account){
+		res.send(account.activity);
+	});
+});
+
 app.listen(port);
 console.log('server start at port:', port);

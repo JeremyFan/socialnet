@@ -1,6 +1,15 @@
 module.exports = function(mongoose, nodemailer) {
 	var crypto = require('crypto');
 
+	var Status = new mongoose.Schema({
+		name: {
+			type: String
+		},
+		status: {
+			type: String
+		}
+	});
+
 	var AccountSchema = new mongoose.Schema({
 		email: {
 			type: String,
@@ -34,7 +43,11 @@ module.exports = function(mongoose, nodemailer) {
 		},
 		biography: {
 			type: String
-		}
+		},
+		// 自己的状态
+		status: [Status],
+		// 朋友圈状态
+		activity: [Status]
 	});
 
 	var Account = mongoose.model('Account', AccountSchema);
@@ -81,7 +94,7 @@ module.exports = function(mongoose, nodemailer) {
 			} else {
 				var conf = require('../conf/mail');
 				var transporter = nodemailer.createTransport(conf);
-				
+
 				resetPasswordUrl += '?account=' + doc._id;
 				var mailOptions = {
 					from: conf.auth.user,
@@ -128,18 +141,19 @@ module.exports = function(mongoose, nodemailer) {
 	 * @return {[type]}     [description]
 	 */
 	var registerCallback = function(err) {
-			if (err)
-				return console.log(err);
+		if (err)
+			return console.log(err);
 
-			return console.log('Account was created');
-		}
-		/**
-		 * 注册
-		 * @param  {[type]} email    注册邮箱
-		 * @param  {[type]} password 注册密码
-		 * @param  {[type]} name     用户名
-		 * @return {[type]}          [description]
-		 */
+		return console.log('Account was created');
+	}
+
+	/**
+	 * 注册
+	 * @param  {[type]} email    注册邮箱
+	 * @param  {[type]} password 注册密码
+	 * @param  {[type]} name     用户名
+	 * @return {[type]}          [description]
+	 */
 	var register = function(email, password, name) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(password);
@@ -156,7 +170,16 @@ module.exports = function(mongoose, nodemailer) {
 		console.log('Save command was sent');
 	}
 
+	var findById = function(accountId, callback) {
+		Account.findOne({
+			_id: accountId
+		}, function(err, doc) {
+			callback(doc);
+		});
+	}
+
 	return {
+		findById: findById,
 		login: login,
 		register: register,
 		changePassword: changePassword,
