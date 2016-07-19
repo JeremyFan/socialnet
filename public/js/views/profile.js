@@ -3,7 +3,7 @@ define(['socialnet-view', 'text!templates/profile.html', 'models/status', 'views
 		var profileView = SocialNetView.extend({
 			el: $('#content'),
 
-			initialize: functon() {
+			initialize: function() {
 				this.model.on('change', this.render, this);
 			},
 
