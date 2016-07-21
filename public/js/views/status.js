@@ -3,7 +3,8 @@ define(['socialnet-view', 'text!templates/status.html'], function(SocialNetView,
 		tagName: 'li',
 
 		render: function() {
-			this.$el.html(_.template(statusTpl, this.model.toJSON()));
+			var template = _.template(statusTpl);
+			this.$el.html(template(this.model.toJSON()));
 			return this;
 		}
 	});
