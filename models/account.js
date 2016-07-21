@@ -131,7 +131,7 @@ module.exports = function(mongoose, nodemailer) {
 			email: email,
 			password: shaSum.digest('hex')
 		}, function(err, doc) {
-			callback(null != doc);
+			callback(doc);
 		});
 	}
 

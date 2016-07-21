@@ -63,13 +63,15 @@ app.post('/login', function(req, res) {
 		return;
 	}
 
-	Account.login(email, password, function(success) {
-		if (!success) {
+	Account.login(email, password, function(doc) {
+		if (doc == null) {
 			res.sendStatus(401);
 			return;
 		}
 
 		req.session.loggedIn = true;
+		req.session.accountId = doc._id;
+
 		console.log('login was successful');
 		res.sendStatus(200);
 	});
@@ -121,14 +123,15 @@ app.get('/accounts/:id', function(req, res) {
 
 app.get('/accounts/:id/status', function(req, res) {
 	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
-	models.Account.findById(accountId, function(account) {
+	Account.findById(accountId, function(account) {
 		res.send(account.status);
 	});
 });
 
 app.post('/accounts/:id/status', function(req, res) {
 	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
-	models.Account.findById(accountId, function(account) {
+
+	Account.findById(accountId, function(account) {
 		var status = {
 			name: account.name,
 			status: req.body.status || ''
@@ -139,14 +142,15 @@ app.post('/accounts/:id/status', function(req, res) {
 		account.save(function(err) {
 			if (err)
 				console.log('Error saving account: ' + err);
+			else
+				res.send(status);
 		});
 	});
-	res.sendStatus(200);
 });
 
-app.get('/accounts/:id/activity',function(req,res){
+app.get('/accounts/:id/activity', function(req, res) {
 	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
-	models.Account.findById(accountId,function(account){
+	Account.findById(accountId, function(account) {
 		res.send(account.activity);
 	});
 });
