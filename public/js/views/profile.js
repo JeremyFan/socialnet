@@ -8,7 +8,8 @@ define(['socialnet-view', 'text!templates/profile.html', 'models/status', 'views
 			},
 
 			render: function() {
-				this.$el.html(_.template(profileTpl, this.model.toJSON()));
+				var template = _.template(profileTpl);
+				this.$el.html(template(this.model.toJSON()));
 
 				var statusCollection = this.model.get('status');
 				if (null != statusCollection) {
@@ -18,7 +19,7 @@ define(['socialnet-view', 'text!templates/profile.html', 'models/status', 'views
 							model: statusModel
 						});
 						var statusHtml = statusView.render().el;
-						$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
+						$(statusHtml).prependTo('.status-list').hide().fadeIn('slow');
 					});
 				}
 			}

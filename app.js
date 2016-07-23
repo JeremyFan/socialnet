@@ -114,7 +114,7 @@ app.get('/accounts/:id', function(req, res) {
 	var accountId = req.params.id == 'me' ? req.session.accountId : req.params.id;
 
 	// FIXME: use findById
-	Account.findOne({
+	Account.findById({
 		_id: accountId
 	}, function(account) {
 		res.send(account);
