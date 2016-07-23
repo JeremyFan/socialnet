@@ -26,6 +26,7 @@ define(['views/index', 'views/register', 'views/login', 'views/forgotpassword', 
 				this.changeView(new IndexView({
 					collection: statusCollection
 				}));
+				statusCollection.fetch();
 			},
 
 			register: function() {
