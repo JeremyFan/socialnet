@@ -105,3 +105,58 @@ input(type='hidden',name='accountId',value='#{locals.accountId}')
 
 ### 路由/接口
 目前路由、接口都写在`app.js`里，有点乱。
+
+## Day 5
+
+### 功能
+实现简单的用户界面：
+- **用户资料：**展示个人信息和最近更新的状态列表。
+- **状态流：**首页改为展示用户好友的状态流。
+- **发状态功能：**首页增加发状态框。
+
+（大概类似微博的“首页”和“个人主页”，首页展示好友的微博流，可以发微博；个人主页展示个人信息和自己发过的微博。）
+
+（现在首页的状态都是自己的，还没有好友这个功能）
+
+
+### 两个技术细节
+#### `_.template()`变更
+书中使用`underscore`的`_.template()`渲染视图：
+```javascript
+this.$el.html(_.template(profileTemplate, this.model.toJSON()));
+```
+**`underscore 1.6`版本之后，`_.template()`不再直接接收数据作为第二个参数。**所以现在应该是：
+```javascript
+var template = _.template(profileTpl);
+this.$el.html(template(this.model.toJSON()));
+```
+
+#### `Backbone.Model`的`urlRoot`属性
+这个属性指定之后，调用`URL`就会自动变成`[urlRoot]/id`的形式。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
